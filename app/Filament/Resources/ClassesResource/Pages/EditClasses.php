@@ -13,7 +13,8 @@ class EditClasses extends EditRecord
     protected function getHeaderActions(): array
     {
         return [
-            Actions\DeleteAction::make(), // Hiển thị nút Delete khi chỉnh sửa
+            // Hiển thị nút Delete khi bên giao diện chỉnh sửa
+            Actions\DeleteAction::make(),
         ];
     }
 }
