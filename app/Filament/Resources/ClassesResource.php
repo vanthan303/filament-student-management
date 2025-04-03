@@ -2,18 +2,18 @@
 
 namespace App\Filament\Resources;
 
-use App\Filament\Resources\ClassesResource\Pages;
-use App\Filament\Resources\ClassesResource\RelationManagers;
-use App\Models\Classes;
 use Filament\Forms;
-use Filament\Forms\Components\TextInput;
-use Filament\Forms\Form;
-use Filament\Resources\Resource;
 use Filament\Tables;
-use Filament\Tables\Columns\TextColumn;
+use App\Models\Classes;
+use Filament\Forms\Form;
 use Filament\Tables\Table;
+use Filament\Resources\Resource;
+use Filament\Tables\Columns\TextColumn;
+use Filament\Forms\Components\TextInput;
 use Illuminate\Database\Eloquent\Builder;
+use App\Filament\Resources\ClassesResource\Pages;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
+use App\Filament\Resources\ClassesResource\RelationManagers;
 
 class ClassesResource extends Resource
 {
@@ -48,7 +48,8 @@ class ClassesResource extends Resource
     {
         return $table
             ->columns([
-                TextColumn::make('name'), // định dạng hiển thị thời gian
+                TextColumn::make('name'), // hiển thị cột name (name giống với tên cột trong CSDL)
+                TextColumn::make('sections.name'), // hiển thị cột "name" từ function sections () {...} ở Models/Classes.php
             ])
             ->filters([
                 //
