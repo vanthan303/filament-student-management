@@ -24,4 +24,16 @@ class Classes extends Model
     {
         return $this->hasMany(Section::class, 'class_id');
     }
+
+
+    /*
+        Khởi tạo mối quan hệ
+        hasMany : Classes sẽ có nhiều Students
+        Bảng "classes" có cột "id" là "khóa chính" tham chiếu đến cột "class_id" ở bảng "students"
+        Laravel sẽ tự động giả định rằng ở bảng "students" có cột "class_id" là "khóa ngoại" tham chiếu đến cột "id" ở bảng "classes"
+    */
+    public function students()
+    {
+        return $this->hasMany(Student::class, 'class_id');
+    }
 }

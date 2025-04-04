@@ -19,7 +19,11 @@ class ClassesResource extends Resource
 {
     protected static ?string $model = Classes::class;
 
+
     protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
+
+    /* Tạo ra 1 Khối block mới với tên 'Academic Management' chứa Module Class */
+    protected static ?string $navigationGroup = 'Academic Management';
 
 
     /**
@@ -32,9 +36,15 @@ class ClassesResource extends Resource
         return $form
             ->schema([
 
-                /* các textfield để nhập liệu và chỉnh sửa được tạo ở đây */
+                /**
+                 * Tạo các textfield để nhập liệu và chỉnh sửa được tạo ở đây
+                */
 
-                TextInput::make('name'), // tạo ra 1 textfield name dùng để nhập mới hoặc chỉnh sửa
+                // tạo ra 1 textfield name dùng để nhập mới hoặc chỉnh sửa
+                TextInput::make('name')
+                    ->required() // bắt buộc nhập
+                    ->unique(ignoreRecord:true) // không được trùng với các bản ghi khác trong bảng (duy nhất)
+                    ->maxLength(255), // tối đa 255 ký tự
             ]);
     }
 
@@ -48,8 +58,17 @@ class ClassesResource extends Resource
     {
         return $table
             ->columns([
-                TextColumn::make('name'), // hiển thị cột name (name giống với tên cột trong CSDL)
-                TextColumn::make('sections.name'), // hiển thị cột "name" từ function sections () {...} ở Models/Classes.php
+                TextColumn::make('name') // thay thế tên cột "name" thành "Họ và tên" trong bảng, // hiển thị cột name (name giống với tên cột trong CSDL)
+                    ->sortable()
+                    ->searchable(),
+
+                TextColumn::make('sections.name') // hiển thị cột "name" từ function sections () {...} ở Models/Classes.php
+                    ->badge(),
+
+
+                TextColumn::make('students_count')
+                    ->counts('students') // đếm số lượng bản ghi trong bảng students
+                    ->badge(),
             ])
             ->filters([
                 //

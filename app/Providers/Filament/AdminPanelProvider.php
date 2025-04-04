@@ -30,15 +30,19 @@ class AdminPanelProvider extends PanelProvider
             ->colors([
                 'primary' => Color::Amber,
             ])
+            ->font('Poppins') // cấu hình font chữ
+            ->brandName('Filament Student Managements') // thay đổi tên logo mặc định
             ->discoverResources(in: app_path('Filament/Resources'), for: 'App\\Filament\\Resources')
             ->discoverPages(in: app_path('Filament/Pages'), for: 'App\\Filament\\Pages')
             ->pages([
-                Pages\Dashboard::class,
+                Pages\Dashboard::class, // hiển thị trang Dashboard
             ])
             ->discoverWidgets(in: app_path('Filament/Widgets'), for: 'App\\Filament\\Widgets')
             ->widgets([
-                Widgets\AccountWidget::class,
-                Widgets\FilamentInfoWidget::class,
+
+                // Hiển thị thông tin mặc định ở trang Dashboard
+                //Widgets\AccountWidget::class, // hiện thông tin tài khoản
+                //Widgets\FilamentInfoWidget::class, // hiện thông tin về phiên bản filament
             ])
             ->middleware([
                 EncryptCookies::class,

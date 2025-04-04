@@ -15,12 +15,18 @@ use App\Filament\Resources\SectionResource\RelationManagers;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Select;
 use Filament\Tables\Columns\TextColumn;
+use Illuminate\Validation\Rules\Exists;
+use Filament\Forms\Get;
+use Illuminate\Validation\Rules\Unique;
 
 class SectionResource extends Resource
 {
     protected static ?string $model = Section::class;
 
     protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
+
+    /* Tạo ra 1 Khối block mới với tên 'Academic Management' chứa Module Section */
+    protected static ?string $navigationGroup = 'Academic Management';
 
 
     /**
@@ -37,7 +43,13 @@ class SectionResource extends Resource
                     ->relationship('class', 'name'), // lấy dữ liệu từ function class() {...} ở Models/Section.php và hiển thị cột "name" ở bảng classes
 
 
-                TextInput::make('name'), // tạo ra 1 textfield name dùng để nhập mới hoặc chỉnh sửa
+                // tạo ra 1 textfield name dùng để nhập mới hoặc chỉnh sửa
+                TextInput::make('name')
+                    ->required() // bắt buộc nhập
+                    ->maxLength(255) // tối đa 255 ký tự
+                    ->unique(ignoreRecord:true, modifyRuleUsing: function (Get $get, Unique $rule){
+                        return $rule->where('class_id', $get('class_id')); // chỉ kiểm tra duy nhất trong class_id này
+                    }), // không được trùng với các bản ghi khác trong bảng (duy nhất)
             ]);
     }
 
@@ -55,6 +67,10 @@ class SectionResource extends Resource
                 TextColumn::make('name'),
                 TextColumn::make('class.name') // hiển thị cột "name" từ function class() {...} ở Models/Section.php
                     ->badge(),
+                TextColumn::make('students_count')
+                    ->counts('students') // đếm số lượng bản ghi trong bảng students
+                    ->badge(),
+
             ])
             ->filters([
                 //
